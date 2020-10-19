@@ -115,6 +115,59 @@ use northwind
 -- from Customers
 -- where CompanyName LIKE '%store%'
 
-/* Dalej tez sa zadania ... */
+/* Str 44/57 */
+
+/* Zad 1 */
+
+-- SELECT CompanyName, Country
+-- from Suppliers
+-- where Country in ('Japan','Italy')
+
+/* Zad 2 */
+
+-- select CompanyName,fax
+-- from Suppliers
+-- where fax is not NULL
+
+/* Zad 3 */
+
+-- SELECT *
+-- from Orders
+-- where (ShippedDate is null or GETDATE() < ShippedDate) and ShipCountry='Argentina'
 
 
+
+
+
+/* Sortowania */
+
+-- select *
+-- from Suppliers
+-- ORDER by Suppliers.SupplierID desc
+
+/* Distinct -> Odnosi sie do calego wyrazenia*/
+
+-- SELECT distinct Country,City
+-- from Suppliers
+-- ORDER by Country
+
+/* Zmiana nazw kolumnn*/
+
+-- SELECT  City as 'ELO'
+-- from Suppliers
+-- ORDER by Country
+
+/* Dodatkowy teks */
+
+-- SELECT FirstName,LastName,'ID Number: ',EmployeeID
+-- from Employees
+
+/* Kolumny wyliczane */
+
+-- select OrderID,UnitPrice,UnitPrice*1.05 as 'newunitprice' 
+-- from [Order Details]
+
+/* Dodawanie Kolumn */
+
+-- select firstname + ' ' +LastName as 'Imie i nazwisko'
+-- from [Employees]
