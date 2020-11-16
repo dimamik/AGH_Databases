@@ -180,6 +180,7 @@ książki, ile dni była przetrzymywana i jaką zapłacono karę */
 
 
 /* Zad 5 -  Wybierz nazwy i ceny produktów o cenie jednostkowej pomiędzy 20 a 30, dla każdego produktu podaj dane adresowe dostawcy*/
+
 -- use Northwind
 -- select Products.ProductName, Products.UnitPrice, Suppliers.Address
 -- from Products
@@ -191,12 +192,12 @@ książki, ile dni była przetrzymywana i jaką zapłacono karę */
 -- where unitprice between 20 and 30
 
 
-/* Zad 6 -  Wybierz nazwy produktów oraz informacje o stanie magazynu dla produktów dostarczanych przez firmę ‘Tokyo magazynu dla produktów dostarczanych przez firmę ‘Tokyo Traders*/
+/* Zad 6 -  Wybierz nazwy produktów oraz informacje o stanie magazynu dla produktów dostarczanych przez firmę ‘Tokyo Traders*/
 
 -- use Northwind
 -- select Products.ProductName, Products.UnitsInStock
 -- from Products
--- LEFT JOIN Suppliers
+-- INNER JOIN Suppliers
 -- ON Suppliers.SupplierID = Products.SupplierID
 -- where Suppliers.CompanyName = 'Tokyo Traders'
 
@@ -226,7 +227,7 @@ książki, ile dni była przetrzymywana i jaką zapłacono karę */
 
 -- select customers.customerid, Address 
 -- from customers
--- left join Orders 
+-- left OUTER join Orders 
 -- on customers.CustomerID=orders.CustomerID and year(orderdate)=1997 
 -- where orderid is null 
 
@@ -429,7 +430,7 @@ podwładnych. */
 -- use Northwind
 -- select prac.LastName + ' ' + prac.FirstName as Boss, podwl.LastName + ' '+ podwl.FirstName as Podwladny
 -- from Employees as prac
---     inner join Employees as podwl
+--     right join Employees as podwl
 --     on podwl.ReportsTo = prac.EmployeeID
 
 -- select e.firstname+' '+e.lastname, ee.firstname+' '+ee.lastname from employees as e
@@ -475,7 +476,7 @@ biblioteki, którzy mają dzieci urodzone przed 1 stycznia 1996. Interesują nas
 --     on j.adult_member_no = a.member_no and  birth_date<'1996/01/01' 
 --     left join loan as l 
 --     on l.member_no = a.member_no  
---     where l.member_no is null 
+--     where (l.member_no is null or l.due_date>GETDATE()) 
 -- order by member_no 
 
 -- select distinct a.member_no, a.street+' '+a.city+ ' '+a.state as Address from adult as a
@@ -485,7 +486,7 @@ biblioteki, którzy mają dzieci urodzone przed 1 stycznia 1996. Interesują nas
 
 -- select *
 -- from loan
--- order by member_no
+-- order by due_date
 
         /* ŁĄCZENIE ZBIORÓW WYNIKOWYCH -
 Użyj operatora UNION do tworzenia pojedynczego zbioru 
@@ -493,7 +494,11 @@ wynikowego z wielu zapytań
      Każde zapytanie musi mieć:
      zgodne typy danych
      taką samą liczbę kolumn 
-     taki sam porządek kolumn w select-list*/
+     taki sam porządek kolumn w select-list
+    
+Operator EXCEPT -> Różnica prawostronna zbiorów
+    
+    */
 
 /* Przykład */
 -- USE northwind
@@ -529,13 +534,15 @@ wynikowego z wielu zapytań
 /* Zad 3 - Podaj listę członków biblioteki mieszkających w Arizonie (AZ), którzy mają  więcej niż dwoje dzieci zapisanych do biblioteki */
 
 -- use library
--- select a.member_no
+-- select m.firstname,m.lastname,count(j.adult_member_no) as 'Liczba dzieci'
 -- from adult a
---     inner JOIN juvenile j
+--     JOIN member m
+--     on m.member_no = a.member_no
+--     JOIN juvenile j
 --     on j.adult_member_no = a.member_no and a.[state]='AZ'
--- GROUP BY a.member_no
+-- GROUP BY m.member_no
 -- having count(j.adult_member_no)>2
--- ORDER BY a.member_no
+
 
 -- select m.member_no, m.firstname+m.lastname from member m
 -- inner join adult a on a.member_no=m.member_no and a.state='AZ'
@@ -574,18 +581,28 @@ wynikowego z wielu zapytań
 
 -- use northwind
 --5.1
--- select categoryname, companyname,  sum(quantity) as 'Quantity' from categories c
--- inner join products p on p.CategoryID=c.CategoryID
--- inner join [Order Details] oo on oo.ProductID=p.ProductID
--- inner join Orders o on o.OrderID=oo.OrderID
--- inner join customers cc on cc.CustomerID=o.CustomerID
+-- use Northwind
+-- select categoryname, companyname,  sum(quantity) as 'Liczba zamówionych jednostek' 
+-- from categories c
+--     inner join products p 
+--     on p.CategoryID=c.CategoryID
+--     inner join [Order Details] oo 
+--     on oo.ProductID=p.ProductID
+--     inner join Orders o 
+--     on o.OrderID=oo.OrderID
+--     inner join customers cc 
+--     on cc.CustomerID=o.CustomerID
 -- group by categoryname, companyname
 
 --5.2
--- select oo.OrderID, companyname, sum(quantity) as Quantity from [Order Details] oo
--- inner join Orders o on o.OrderID=oo.OrderID
--- inner join Customers c on c.CustomerID=o.CustomerID
--- group by oo.OrderID, c.CustomerID, companyname order by oo.OrderID
+-- use Northwind
+-- select od.OrderID, companyname, sum(quantity) as Quantity from [Order Details] od
+--     inner join Orders o 
+--     on o.OrderID=od.OrderID
+--     inner join Customers c 
+--     on c.CustomerID=o.CustomerID
+-- group by od.OrderID, c.CustomerID, companyname 
+-- order by od.OrderID
 
 --5.3
 -- select oo.OrderID, companyname, sum(quantity) as Quantity from [Order Details] oo
@@ -596,20 +613,31 @@ wynikowego z wielu zapytań
 --  order by oo.OrderID
 
 --5.4
--- select distinct companyname, productname from customers c
--- inner join orders o on o.CustomerID=c.CustomerID
--- inner join [Order Details] oo on oo.OrderID=o.OrderID
--- inner join Products p on p.ProductID=oo.ProductID
+-- use Northwind
+-- select distinct companyname, productname 
+-- from customers c
+--     inner join orders o 
+--     on o.CustomerID=c.CustomerID
+--     inner join [Order Details] oo 
+--     on oo.OrderID=o.OrderID
+--     inner join Products p 
+--     on p.ProductID=oo.ProductID
 
 --5.5
--- select distinct companyname, o.orderid, sum(quantity*unitprice*(1-discount)) as 'Order value' from customers c
--- left join orders o on o.CustomerID=c.CustomerID
--- left join [Order Details] oo on oo.OrderID=o.OrderID
--- group by companyname, o.orderid
+-- use Northwind
+-- select distinct c.companyname, o.orderid, sum(od.quantity*od.unitprice*(1-od.discount)) as 'Wartość zamówienia' 
+-- from customers c
+--     left join orders o 
+--     on o.CustomerID=c.CustomerID
+--     left join [Order Details] od 
+--     on od.OrderID=o.OrderID
+-- group by c.companyname, o.orderid
 
 -- use library
 --5.6
--- select firstname, lastname from member m
+-- use library
+-- select firstname, lastname 
+-- from member m
 -- left join loan l on l.member_no=m.member_no
 -- left join loanhist lh on lh.member_no=m.member_no
 -- group by m.member_no, firstname, lastname
