@@ -42,17 +42,17 @@ Napisz polecenie, które
 Do modyfikacji:
 */
 
-select firstname + SPACE(1) + SPACE(1) + middleinitial + SPACE(1) + lastname as 'email_name'
-from member
-where lastname='Anderson'
+-- select firstname + SPACE(1) + SPACE(1) + middleinitial + SPACE(1) + lastname as 'email_name'
+-- from member
+-- where lastname='Anderson'
 
 
 /* Zad 3 po modyfikacji */
 
-SELECT LOWER(
-    firstname + middleinitial + SUBSTRING(lastname,1,2)
-)
-from member
+-- SELECT LOWER(
+--     LTRIM(RTRIM(firstname + middleinitial + SUBSTRING(lastname,1,2))
+-- )
+-- from member
 
 
 /* Zad 4  Napisz polecenie, które wybiera title i title_no z tablicy 

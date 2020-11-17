@@ -1,8 +1,44 @@
 /* AGREGATY ĆWICZENIE KOŃCOWE */
-use Northwind
+
 
 
     /* Cwiczenie 1 2/4*/
+
+/* Zad Z Cwiczenia */
+-- use Northwind
+-- select OrderID
+-- from [Order Details]
+-- group by OrderID
+-- having sum(Discount) = 0
+
+
+/* Liste zamowien przez kazdego przcownika z podzialem na lata kwartale miesiace */
+-- SELECT EmployeeID, YEAR(OrderDate) as Year, DATEPART(QUARTER,OrderDate) as Quarter,MONTH(OrderDate) as Month,COUNT(*) as Liczba_Zamowien
+-- from Orders
+-- group by EmployeeID,year(OrderDate),DATEPART(QUARTER,OrderDate),MONTH(OrderDate)
+-- with ROLLUP
+
+-- SELECT EmployeeID, YEAR(OrderDate) as Year, DATEPART(QUARTER,OrderDate) as Quarter,MONTH(OrderDate) as Month,COUNT(*) as Liczba_Zamowien
+-- from Orders
+-- group by EmployeeID,year(OrderDate),DATEPART(QUARTER,OrderDate),MONTH(OrderDate)
+
+/* Dla kazdego zamowienia wylicz ile jest zysku na znizce */
+-- select OrderID, SUM(UnitPrice * Quantity * Discount)
+-- from [Order Details]
+-- group by OrderID
+
+/* W ktorym dniu tygodnia powinni klijeci skladac zamowienia zeby liczba zamowien byla najwieksza */
+
+-- SELECT  DATEPART(WEEKDAY, OrderDate), COUNT(*)
+-- from Orders
+-- GROUP BY DATEPART(WEEKDAY, OrderDate)
+-- ORDER BY COUNT(*) DESC
+
+/* Na jaka litere najw kl */
+select TOP 1 LEFT(CompanyName,1)
+from Customers
+GROUP BY LEFT(CompanyName,1)
+ORder by Count(*)
 
 /* Zad 1 -   Napisz polecenie, które oblicza wartość sprzedaży dla każdego 
 zamówienia i wynik zwraca posortowany w malejącej kolejności 

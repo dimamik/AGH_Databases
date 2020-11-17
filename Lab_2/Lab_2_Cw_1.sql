@@ -204,3 +204,5 @@ produktów sprzedawanych w butelkach (‘bottle’) */
 -- ORDER BY productid, orderid
 -- COMPUTE SUM(quantity) BY productid
 -- COMPUTE SUM(quantity)
+
+/* Zad dodatkowe od niej: Przepisać ROLLUP na wcześniej wiadome funkcje */

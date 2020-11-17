@@ -1,5 +1,5 @@
 ﻿/* Setting default database */
-use library
+    use library
 /* Lab 1 Cw_Koncowe 17.10.2020*/
 
 /*Zad 1 Przyjmujac ze title_no - numer ksiazki
