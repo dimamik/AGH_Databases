@@ -6,7 +6,7 @@
 -- from Customers as c
 -- where exists
 --     (
---         select distinct *
+--         select *
 --         from Orders as o 
 --         join Shippers as s
 --             on s.ShipperID=o.ShipVia
@@ -110,6 +110,8 @@
 --     )
 -- )
 
+/* ZADANIE DODATKOWE! -> BEZ PODZAPYTAŃ ZROBIĆ TE SAME ZADANIA */
+-- TODO
 -- SELECT ​P.​ProductName​, ​P.​UnitPrice 
 -- FROM ​Products P 
 -- WHERE ​P.​UnitPrice ​< ( 
@@ -182,13 +184,13 @@ różnicę między ceną produktu a średnią ceną wszystkich produktów danej 
 
 /* Cw 4 4/5 */
 /* Zad 1 -   Podaj łączną wartość zamówienia o numerze 1025 (uwzględnij cenę za przesyłkę)*/
--- select o.Freight + (
---     select SUM(UnitPrice*Quantity*(1-Discount))
---     from [Order Details] od
---     where od.OrderID = 10250
--- )
--- from Orders o
--- where o.OrderID=10250
+select o.Freight + (
+    select SUM(UnitPrice*Quantity*(1-Discount))
+    from [Order Details] od
+    where od.OrderID = 10250
+)
+from Orders o
+where o.OrderID=10250
 
 -- SELECT ​O.​Freight ​+ (​SELECT ​SUM​(OD.​UnitPrice​*OD.​Quantity​*(​1​-OD.​Discount​)) 
 -- FROM ​[Order Details] ​AS ​OD 
@@ -233,18 +235,18 @@ różnicę między ceną produktu a średnią ceną wszystkich produktów danej 
 --    ​)​;​--5.3 
 
 /* Zad 4 -  Podaj produkty kupowane przez więcej niż jednego klienta*/
--- use Northwind
--- select p.ProductName as name
--- from Products p
--- where exists(
---     select * 
---     from [Order Details] od
---     join Orders o
---     on od.OrderID = o.OrderID
---     group by o.CustomerID
---     having COUNT(*)>1
--- )
--- order by name
+use Northwind
+select p.ProductName as name
+from Products p
+where exists(
+    select * 
+    from [Order Details] od
+    join Orders o
+    on od.OrderID = o.OrderID
+    group by o.CustomerID
+    having COUNT(*)>1
+)
+order by name
  
 
 -- select ​P.​ProductName​ as name, ​count​(​*​) 
